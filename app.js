@@ -90,12 +90,13 @@ app.get("/register", function(req,res){
 });
 
 app.get("/secrets", function(req, res) {
-  // wecheck to see if user is authenticated
-  if (req.isAuthenticated()) {
-    res.render("secrets");
-  } else {
-    res.redirect("/login");
-  }
+  User.find({secret: {$ne:null}}, function(err, foundUsers){
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("secrets", {usersWithSecrets: foundUsers});
+    }
+  });
 });
 
 app.get("/submit", function(req, res) {
